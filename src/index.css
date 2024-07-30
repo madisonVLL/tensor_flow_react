@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+thead {
+  background-color: #a894c8;
+  color: #fdfff5;
+  font-size: large;
+}
+
+tbody, caption {
+  color: #a894c8;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.calEvents {
+  display: inline-flex;
+  min-width: 65.625rem;
+  overflow: scroll;
+
+}
+
+.month_cal {
+  font-size: 400%;
+  width: 67%;
+}
+
+.taskDets {
+  padding: 0.5rem;
+  width: fit-content;
+  border-top:  0.25rem solid #a894c8;
+  fill: 100%;
+}
+
+.task_cal {
+  padding: 1.25rem 1.563rem 1.25rem 1.375rem;
+  box-shadow: #00000059 0px -0.125rem 0.375rem 0px inset;
+  background-color: #EFEBF5;
+  border-color: #a894c8;
+  border-style: solid;
+  border-width: 9px;
+  border-radius: 2.188rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: #2C203E;
+  width: 33%;
+  align-content: center;
+  align-items: center;
+}
+
+.title {
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: larger;
+}
+
+.createTask {
+  border-top:  0.25rem solid #a894c8;
+}
+
+.create_event {
+  display: none;
+}
+
+
+
+button {
+  display: flex;
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  box-shadow: rgba(59, 25, 71, 0.35) 0rem -0.125rem 0.375rem 0px inset;
+  background-color: #fffdfd;
+  border-color: #a894c8;;
+  border-style: solid;
+  border-width: 9px;
+  border-radius: 2.188rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: #a38aaa;
+  transition: transform 200ms cubic-bezier(0.68, -0.55, 0.27, 2.5),
+    border-color 200ms ease-in-out, background-color 200ms ease-in-out;
+  word-spacing: -0.125rem;
+  display: block;
+  margin: auto;
+}
+
+input, option, select {
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  box-shadow: rgba(59, 25, 71, 0.35) 0rem -0.125rem 0.375rem 0px inset;
+  background-color: #fffdfd;
+  border-color: #a894c8;
+  border-style: solid;
+  border-width: 0.563rem;
+  border-radius: 2.188rem;
+  font-weight: bold;
+  color: #6d606d;
+}
+
+input:hover, option:hover, select:hover {
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  box-shadow: rgba(59, 25, 71, 0.35) 0rem -0.125rem 0.375rem 0px inset;
+  background-color: #fffdfd;
+  border-color: #806f9a;
+  border-style: solid;
+  border-width: 0.563rem;
+  border-radius: 2.188rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+@keyframes movingBorders {
+  0% {
+    border-color: #6d606d;
+  }
+
+  50% {
+    border-color: #baa5ba;
+  }
+
+  90% {
+    border-color: #dcc1dc;
+  }
+}
+
+button:hover {
+  background-color: #eee;
+  transform: scale(105%);
+  animation: movingBorders 3s infinite;
+  color: rgb(82, 64, 94);
+}
+
+button svg {
+  margin-right: 11px;
+  fill: rgb(82, 64, 94);
+  transition: opacity 100ms ease-in-out;
+}
+
+#create_event {
+  display: none;
+}
