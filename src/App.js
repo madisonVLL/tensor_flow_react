@@ -10,8 +10,8 @@ var month_legnth = {0: ["January", 31], 1: ["Febuary", 28], 2: ["March", 31],
 var days_of_week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 var taskLog = {"demo": ["Confirm RSVPs", "2024-07-23", "Finance", "Company-Wide BBQ", "2024-08-01", "Ensure that everyone who wants to come to the event is accounted for, ensure that finance allocated enough funds for catering."],
-  "demo2": ["Order Flowers", "2024-07-16", "Human Resources", "Company-Wide BBQ", "2024-08-01", "Order boquets for members of the team who've been there for more than 10 years, single flower for all other employees"],
-  "demo3": ["Book Holiday Party Venue", "2024-07-24", "Accounting", "US Division Holiday Party", "Have accounting write a down payment check to book the Highlife Room at Kay-ce's"]
+  "demo2": ["Order Flowers", "2024-09-16", "Human Resources", "Company-Wide BBQ", "2024-08-01", "Order boquets for members of the team who've been there for more than 10 years, single flower for all other employees"],
+  "demo3": ["Book Holiday Party Venue", "2024-09-24", "Accounting", "US Division Holiday Party", "Have accounting write a down payment check to book the Highlife Room at Kay-ce's"]
 }
 
 
@@ -38,14 +38,16 @@ function buildCalander() {
   }
   var days_of_month = Array(month_legnth[first_day_month.getMonth()][1]).fill().map((_, index) => index + 1);
   var first_weekday = first_day_month.getDay()
-  var week1 = days_of_month.slice(first_weekday - 1 , 7 - first_weekday)
+  var week1 = days_of_month.slice(0 ,first_weekday -1)
+  var first_week_legnth =  7 - week1.length
   var week2 = days_of_month.slice(7 - first_weekday, 7 - first_weekday + 7)
   var week3 = days_of_month.slice(14 - first_weekday, 14 - first_weekday + 7)
   var week4 = days_of_month.slice(21 - first_weekday, 21 - first_weekday + 7)
   var week5 =  days_of_month.slice(21 - first_weekday + 7)
 
-  if (week1.length < 7) {
-    week1 = [" " * (7 - week1.length)].concat(week1)
+  if (first_week_legnth != 0) {
+    var empty_dates = Array(first_week_legnth).fill().map((x, i) => "0")
+    week1 = empty_dates.concat(week1)
   }
 
   return [week1, week2, week3, week4, week5]
@@ -53,7 +55,7 @@ function buildCalander() {
 
 function dateToString(date) {
   var event_date = new Date(date)
-  var weekday = days_of_week[event_date.getDay() + 1]
+  var weekday = days_of_week[event_date.getDay()]
   return weekday + ", " + month_legnth[parseInt(date.slice(5,7)) - 1][0] + " " + parseInt(date.slice(-2)) + ", " + date.slice(0,4)
 }
 
@@ -179,6 +181,28 @@ function App() {
       );
     }
 
+    function AddNewTask() {
+      const task_name = document.querySelector('#task_name').value;
+      const task_date = document.querySelector('#task_date').value;
+      const task_department = document.querySelector('#task_department').value;
+
+      const events = useLiveQuery(() => eventsDB.events.toArray());
+
+      for (let i = 0; i < events.length; i++) {
+        if (events[i].eventName == task_name) {
+          const id = await eventsDB.events.add({
+            eventName,
+            eventDate,
+            associated_tasks
+          });
+
+          eventsDB.events.delete(eventsDB.events[i].id)
+        }
+
+      }
+
+    }
+
     return (
       <div className='createTask'>
         <p>Want Help Generating Tasks For The {display_event}? Press The Button Below
@@ -189,15 +213,15 @@ function App() {
         </p>
         <div style={{display: new_event_display}} className='manual_task'>
         <p>Task Name</p>
-        <input type="text" placeholder='Task Name'/>
+        <input type="text" placeholder='Task Name' id="task_name"/>
         <br></br>
-        <input placeholder='Department' type="text" />
+        <input placeholder='Department' type="text" id="task_department"/>
         <br></br>
-        <input type='date' />
+        <input type='date' id="task_date"/>
         <br></br>
         {CreateDropdowns()}
         <br></br>
-        <button>Submit Task</button>
+        <button onClick={() => AddNewTask()}>Submit Task</button>
         <p></p>
         <div id="submitNewEvent" style={{display: "none"}}>
           {AddEvent()}
@@ -243,14 +267,18 @@ function App() {
   }
 
   function DisplayEvents() {
-    const friends = useLiveQuery(() => eventsDB.events.toArray());
+    const eventArray = eventsDB.events.toArray();
+    const events = useLiveQuery(() => eventsDB.events.toArray());
+    const upcoming_events = []
+    const previous_events = []
 
-  if (!friends) return null;
+  if (!events) return null;
+  console.log(events[0].id)
   return (
     <ul>
-      {friends?.map((friend) => (
+      {events?.map((friend) => (
         <li key={friend.id}>
-          {friend.eventName}, {friend.eventDate}, {friend.associated_tasks}
+          {friend.eventName}, {dateToString(friend.eventDate.slice(0, 10))}, {friend.associated_tasks}
         </li>
       ))}
     </ul>
