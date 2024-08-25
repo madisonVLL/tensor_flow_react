@@ -21,6 +21,21 @@ function getTaskValues(index) {
   return values
 }
 
+function GetEvents() {
+  const events = useLiveQuery(() => eventsDB.events.toArray());
+  console.log(events)
+  
+  const eventNameList = []
+
+  for (let i = 0; i < events.length; i++) {
+    eventNameList.push(events[i].eventName)
+  }
+  
+
+  return eventNameList
+  
+}
+
 function buildMonth() {
   var curr_date = new Date()
   var month = curr_date.getMonth()
@@ -161,7 +176,6 @@ function App() {
   }
 
   function Addtask() {
-    var larger_events = [... new Set(getTaskValues(3))]
 
     function getSelectNewEvent() {
       const event_select = document.querySelector('#eventSelect');
@@ -172,6 +186,8 @@ function App() {
     }
 
     function CreateDropdowns() {
+      var larger_events = GetEvents()
+
       return (
         <select id="eventSelect" onChange={() => {getSelectNewEvent()}}>
           <option>Please Select an Event</option>
@@ -190,15 +206,19 @@ function App() {
 
       for (let i = 0; i < events.length; i++) {
         if (events[i].eventName == task_name) {
-          const id = await eventsDB.events.add({
-            eventName,
-            eventDate,
-            associated_tasks
+
+          var event_name = events[i].eventName;
+          var event_date = events[i].eventDame;
+          var tasks = events[i].associated_tasks.push([task_name, task_date, task_department]);
+
+          const id = eventsDB.events.add({
+            event_name, 
+            event_date, 
+            tasks
           });
 
           eventsDB.events.delete(eventsDB.events[i].id)
         }
-
       }
 
     }
@@ -287,6 +307,7 @@ function App() {
 
 
   function buildDailyOverview() {
+
     const num_tasks = [...Array(Object.entries(taskLog).length).keys()]
     var num_daily_task_count = 0
     for (var i in num_tasks) {
